@@ -1,0 +1,950 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <title>Admin Dashboard - Mobile Addiction</title>
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" type="text/css" href="css/bootstrap.css" />
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&family=Open+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link href="css/font-awesome.min.css" rel="stylesheet" />
+
+  <style>
+    body {
+      font-family: 'Open Sans', sans-serif;
+      background: radial-gradient(circle at center, #0f153a 0%, #05071a 100%);
+      color: #ffffff;
+      min-height: 100vh;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.05);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(0, 187, 240, 0.4);
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(0, 187, 240, 0.6);
+    }
+
+    .glass-nav {
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 15px 30px;
+    }
+
+    .navbar-brand span {
+      font-weight: 700;
+      font-size: 22px;
+      color: #ffffff;
+      letter-spacing: 0.5px;
+    }
+
+    .navbar-brand span span {
+      color: #00bbf0;
+    }
+
+    .btn-logout {
+      background: transparent;
+      border: 1px solid rgba(255, 51, 102, 0.4);
+      color: #ff3366;
+      border-radius: 20px;
+      padding: 6px 20px;
+      font-size: 14px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    .btn-logout:hover {
+      background: #ff3366;
+      color: #ffffff;
+      box-shadow: 0 5px 15px rgba(255, 51, 102, 0.3);
+      transform: translateY(-1px);
+    }
+
+    .dashboard-container {
+      padding: 40px 30px;
+      max-width: 1300px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 5;
+    }
+
+    /* Abstract background shapes */
+    .bg-glow-1 {
+      position: absolute;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(0, 187, 240, 0.15) 0%, rgba(0, 187, 240, 0) 70%);
+      top: 10%;
+      left: -200px;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .bg-glow-2 {
+      position: absolute;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(35, 26, 111, 0.25) 0%, rgba(35, 26, 111, 0) 70%);
+      bottom: 10%;
+      right: -200px;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    /* Stats Grid */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 25px;
+      margin-bottom: 40px;
+    }
+
+    .stat-card {
+      background: rgba(255, 255, 255, 0.04);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 15px;
+      padding: 25px;
+      display: flex;
+      align-items: center;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+      transition: all 0.3s ease;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-3px);
+      border-color: rgba(0, 187, 240, 0.3);
+      box-shadow: 0 15px 30px rgba(0, 187, 240, 0.1);
+    }
+
+    .stat-icon {
+      width: 60px;
+      height: 60px;
+      border-radius: 12px;
+      background: rgba(0, 187, 240, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      color: #00bbf0;
+      margin-right: 20px;
+      box-shadow: inset 0 0 10px rgba(0, 187, 240, 0.1);
+    }
+
+    .stat-icon.users {
+      background: rgba(168, 85, 247, 0.1);
+      color: #a855f7;
+    }
+
+    .stat-icon.subscribers {
+      background: rgba(16, 185, 129, 0.1);
+      color: #10b981;
+    }
+
+    .stat-info h3 {
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: rgba(255, 255, 255, 0.5);
+      margin: 0 0 5px 0;
+      font-weight: 600;
+    }
+
+    .stat-number {
+      font-size: 32px;
+      font-weight: 700;
+      margin: 0;
+    }
+
+    /* Main glass container */
+    .glass-panel {
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 20px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+      overflow: hidden;
+    }
+
+    .panel-header {
+      padding: 25px 30px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+
+    .panel-header h2 {
+      font-size: 20px;
+      font-weight: 700;
+      margin: 0;
+      letter-spacing: 0.5px;
+    }
+
+    .panel-header h2 span {
+      color: #00bbf0;
+    }
+
+    .search-box {
+      position: relative;
+      max-width: 300px;
+      width: 100%;
+    }
+
+    .search-box input {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 20px;
+      color: #ffffff;
+      padding: 8px 15px 8px 38px;
+      width: 100%;
+      font-size: 14px;
+      transition: all 0.3s ease;
+    }
+
+    .search-box input:focus {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: #00bbf0;
+      box-shadow: 0 0 8px rgba(0, 187, 240, 0.2);
+      outline: none;
+    }
+
+    .search-box i {
+      position: absolute;
+      left: 14px;
+      top: 11px;
+      color: rgba(255, 255, 255, 0.4);
+      font-size: 13px;
+    }
+
+    .dashboard-tabs {
+      display: flex;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 0 30px;
+    }
+
+    .d-tab {
+      background: transparent;
+      border: none;
+      border-bottom: 3px solid transparent;
+      color: rgba(255, 255, 255, 0.6);
+      padding: 15px 25px;
+      font-weight: 600;
+      font-size: 15px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .d-tab:hover {
+      color: #ffffff;
+    }
+
+    .d-tab.active {
+      color: #00bbf0;
+      border-bottom-color: #00bbf0;
+    }
+
+    /* Tables */
+    .table-container {
+      padding: 25px 30px;
+      overflow-x: auto;
+    }
+
+    .custom-table {
+      width: 100%;
+      border-collapse: collapse;
+      color: #ffffff;
+    }
+
+    .custom-table th {
+      border-bottom: 2px solid rgba(255, 255, 255, 0.08);
+      color: rgba(255, 255, 255, 0.5);
+      font-size: 13px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 15px 12px;
+      text-align: left;
+    }
+
+    .custom-table td {
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      padding: 15px 12px;
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.8);
+    }
+
+    .custom-table tr:hover td {
+      background: rgba(255, 255, 255, 0.02);
+      color: #ffffff;
+    }
+
+    .custom-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .badge-date {
+      background: rgba(255, 255, 255, 0.06);
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 500;
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    .btn-action {
+      background: transparent;
+      border: none;
+      width: 30px;
+      height: 30px;
+      border-radius: 8px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      margin-right: 5px;
+      transition: all 0.3s ease;
+      color: #ffffff;
+    }
+
+    .btn-action.view {
+      background: rgba(0, 187, 240, 0.1);
+      color: #00bbf0;
+    }
+
+    .btn-action.view:hover {
+      background: #00bbf0;
+      color: #ffffff;
+    }
+
+    .btn-action.delete {
+      background: rgba(255, 51, 102, 0.1);
+      color: #ff3366;
+    }
+
+    .btn-action.delete:hover {
+      background: #ff3366;
+      color: #ffffff;
+    }
+
+    /* Modal Styling */
+    .glass-modal {
+      display: none;
+      position: fixed;
+      z-index: 1050;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0, 0, 0, 0.65);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-content {
+      background: rgba(15, 21, 58, 0.9);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+      border-radius: 20px;
+      width: 100%;
+      max-width: 600px;
+      padding: 30px;
+      color: #ffffff;
+      animation: modalFade 0.3s ease;
+    }
+
+    @keyframes modalFade {
+      from {
+        opacity: 0;
+        transform: scale(0.95);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    .modal-header {
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      padding-bottom: 15px;
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .modal-header h3 {
+      font-size: 20px;
+      font-weight: 700;
+      margin: 0;
+    }
+
+    .modal-close {
+      font-size: 24px;
+      cursor: pointer;
+      color: rgba(255, 255, 255, 0.5);
+      transition: all 0.3s ease;
+    }
+
+    .modal-close:hover {
+      color: #ff3366;
+    }
+
+    .modal-body label {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: rgba(255, 255, 255, 0.4);
+      font-weight: 600;
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    .modal-field {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 10px;
+      padding: 12px 15px;
+      font-size: 15px;
+      margin-bottom: 20px;
+      color: #ffffff;
+    }
+
+    .modal-message {
+      white-space: pre-wrap;
+      max-height: 200px;
+      overflow-y: auto;
+    }
+
+    /* Toast styles */
+    .toast-container {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 9999;
+    }
+
+    .custom-toast {
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(5px);
+      border-left: 4px solid #00bbf0;
+      color: #ffffff;
+      min-width: 280px;
+      border-radius: 5px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+      padding: 15px 20px;
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      animation: slideIn 0.3s ease forwards;
+    }
+
+    .custom-toast.error {
+      border-left-color: #ff3366;
+    }
+
+    .custom-toast.success {
+      border-left-color: #00ffcc;
+    }
+
+    @keyframes slideIn {
+      from {
+        transform: translateX(100%);
+        opacity: 0;
+      }
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+
+    @keyframes fadeOut {
+      to {
+        transform: translateY(-20px);
+        opacity: 0;
+      }
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 50px 0;
+      color: rgba(255, 255, 255, 0.4);
+    }
+
+    .empty-state i {
+      font-size: 48px;
+      margin-bottom: 15px;
+      color: rgba(255, 255, 255, 0.2);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="bg-glow-1"></div>
+  <div class="bg-glow-2"></div>
+
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg glass-nav justify-content-between">
+    <a class="navbar-brand" href="#">
+      <span>Mobile <span>Dashboard</span></span>
+    </a>
+    <button class="btn-logout" onclick="handleLogout()">
+      <i class="fa fa-sign-out" aria-hidden="true"></i> Logout
+    </button>
+  </nav>
+
+  <!-- Dashboard Content -->
+  <div class="dashboard-container">
+    <!-- Stats Section -->
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-icon">
+          <i class="fa fa-envelope-o" aria-hidden="true"></i>
+        </div>
+        <div class="stat-info">
+          <h3>Total Inquiries</h3>
+          <p class="stat-number" id="statInquiries">0</p>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon subscribers">
+          <i class="fa fa-paper-plane-o" aria-hidden="true"></i>
+        </div>
+        <div class="stat-info">
+          <h3>Newsletter Subs</h3>
+          <p class="stat-number" id="statSubscribers">0</p>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon users">
+          <i class="fa fa-users" aria-hidden="true"></i>
+        </div>
+        <div class="stat-info">
+          <h3>Active Admins</h3>
+          <p class="stat-number" id="statAdmins">0</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Panel -->
+    <div class="glass-panel">
+      <div class="panel-header">
+        <h2>System <span>Data</span></h2>
+        <div class="search-box">
+          <i class="fa fa-search" aria-hidden="true"></i>
+          <input type="text" id="dashboardSearch" placeholder="Search..." oninput="handleSearch(this.value)" />
+        </div>
+      </div>
+
+      <div class="dashboard-tabs">
+        <button class="d-tab active" id="tabInquiries" onclick="switchTab('inquiries')">Inquiries</button>
+        <button class="d-tab" id="tabSubscribers" onclick="switchTab('subscribers')">Newsletter</button>
+      </div>
+
+      <!-- Inquiries Content -->
+      <div id="inquiriesPanel" class="table-container">
+        <table class="custom-table" id="inquiriesTable">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Mobile</th>
+              <th>Address</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="inquiriesList">
+            <!-- Dynamic Injection -->
+          </tbody>
+        </table>
+        <div id="inquiriesEmpty" class="empty-state d-none">
+          <i class="fa fa-folder-open-o" aria-hidden="true"></i>
+          <p>No inquiries found.</p>
+        </div>
+      </div>
+
+      <!-- Subscribers Content -->
+      <div id="subscribersPanel" class="table-container d-none">
+        <table class="custom-table" id="subscribersTable">
+          <thead>
+            <tr>
+              <th>Date Joined</th>
+              <th>Email Address</th>
+              <th style="width: 100px;">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="subscribersList">
+            <!-- Dynamic Injection -->
+          </tbody>
+        </table>
+        <div id="subscribersEmpty" class="empty-state d-none">
+          <i class="fa fa-folder-open-o" aria-hidden="true"></i>
+          <p>No subscribers found.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Detail Modal -->
+  <div class="glass-modal" id="detailModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Inquiry Details</h3>
+        <span class="modal-close" onclick="closeModal()">&times;</span>
+      </div>
+      <div class="modal-body">
+        <label>Name</label>
+        <div class="modal-field" id="modalName">Joshua D</div>
+
+        <div class="row">
+          <div class="col-md-6">
+            <label>Email</label>
+            <div class="modal-field" id="modalEmail">joshua@example.com</div>
+          </div>
+          <div class="col-md-6">
+            <label>Mobile Number</label>
+            <div class="modal-field" id="modalMobile">+918362376123</div>
+          </div>
+        </div>
+
+        <label>Address</label>
+        <div class="modal-field" id="modalAddress">KLE Tech University, Vidyanagar Hubbli</div>
+
+        <label>Message/Notes</label>
+        <div class="modal-field modal-message" id="modalMessage">Inquiry details go here...</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/jquery-3.4.1.min.js"></script>
+  <script>
+    let activeTab = 'inquiries'; // inquiries or subscribers
+    let allContacts = [];
+    let allSubscribers = [];
+
+    // Check auth on load
+    $(document).ready(function () {
+      loadDashboardData();
+    });
+
+    function showToast(message, type = 'info') {
+      const container = document.getElementById('toastContainer');
+      const toast = document.createElement('div');
+      toast.className = `custom-toast ${type}`;
+      
+      let icon = 'fa-info-circle';
+      if (type === 'success') icon = 'fa-check-circle';
+      if (type === 'error') icon = 'fa-exclamation-triangle';
+
+      toast.innerHTML = `
+        <div>
+          <i class="fa ${icon}" aria-hidden="true" style="margin-right: 10px;"></i>
+          <span>${message}</span>
+        </div>
+        <i class="fa fa-times" aria-hidden="true" style="cursor: pointer; margin-left: 15px;" onclick="this.parentElement.remove()"></i>
+      `;
+      
+      container.appendChild(toast);
+      
+      setTimeout(() => {
+        toast.style.animation = 'fadeOut 0.5s ease forwards';
+        setTimeout(() => {
+          toast.remove();
+        }, 500);
+      }, 4000);
+    }
+
+    async function loadDashboardData() {
+      try {
+        const response = await fetch('/api/admin/dashboard-data');
+        if (response.status === 401) {
+          // Redirect to login
+          window.location.href = '/login.html';
+          return;
+        }
+        
+        const result = await response.json();
+        if (result.success) {
+          allContacts = result.contacts;
+          allSubscribers = result.subscribers;
+          
+          // Update stats
+          document.getElementById('statInquiries').innerText = result.stats.total_contacts;
+          document.getElementById('statSubscribers').innerText = result.stats.total_subscribers;
+          document.getElementById('statAdmins').innerText = result.stats.total_users;
+
+          renderContacts(allContacts);
+          renderSubscribers(allSubscribers);
+        } else {
+          showToast(result.message || 'Error loading dashboard data', 'error');
+        }
+      } catch (err) {
+        showToast('Network error loading dashboard.', 'error');
+        console.error(err);
+      }
+    }
+
+    function renderContacts(contacts) {
+      const tbody = document.getElementById('inquiriesList');
+      const emptyDiv = document.getElementById('inquiriesEmpty');
+      const table = document.getElementById('inquiriesTable');
+      
+      tbody.innerHTML = '';
+      
+      if (contacts.length === 0) {
+        emptyDiv.classList.remove('d-none');
+        table.classList.add('d-none');
+        return;
+      }
+      
+      emptyDiv.classList.add('d-none');
+      table.classList.remove('d-none');
+
+      contacts.forEach(contact => {
+        // format date
+        const dateStr = formatDate(contact.created_at);
+        const tr = document.createElement('tr');
+        
+        tr.innerHTML = `
+          <td><span class="badge-date">${dateStr}</span></td>
+          <td style="font-weight: 600;">${escapeHTML(contact.name)}</td>
+          <td>${escapeHTML(contact.email)}</td>
+          <td>${escapeHTML(contact.mobile_number)}</td>
+          <td>${escapeHTML(contact.address)}</td>
+          <td>
+            <button class="btn-action view" onclick="viewContact(${contact.id})" title="View Details">
+              <i class="fa fa-eye" aria-hidden="true"></i>
+            </button>
+            <button class="btn-action delete" onclick="deleteContact(${contact.id})" title="Delete">
+              <i class="fa fa-trash" aria-hidden="true"></i>
+            </button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function renderSubscribers(subscribers) {
+      const tbody = document.getElementById('subscribersList');
+      const emptyDiv = document.getElementById('subscribersEmpty');
+      const table = document.getElementById('subscribersTable');
+      
+      tbody.innerHTML = '';
+      
+      if (subscribers.length === 0) {
+        emptyDiv.classList.remove('d-none');
+        table.classList.add('d-none');
+        return;
+      }
+      
+      emptyDiv.classList.add('d-none');
+      table.classList.remove('d-none');
+
+      subscribers.forEach(sub => {
+        const dateStr = formatDate(sub.created_at);
+        const tr = document.createElement('tr');
+        
+        tr.innerHTML = `
+          <td><span class="badge-date">${dateStr}</span></td>
+          <td style="font-weight: 600; font-size: 15px;">${escapeHTML(sub.email)}</td>
+          <td>
+            <button class="btn-action delete" onclick="deleteSubscriber(${sub.id})" title="Unsubscribe">
+              <i class="fa fa-trash" aria-hidden="true"></i>
+            </button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function switchTab(tab) {
+      activeTab = tab;
+      
+      const tabInq = document.getElementById('tabInquiries');
+      const tabSub = document.getElementById('tabSubscribers');
+      const panelInq = document.getElementById('inquiriesPanel');
+      const panelSub = document.getElementById('subscribersPanel');
+      
+      // Clear search input on tab switch
+      document.getElementById('dashboardSearch').value = '';
+      
+      if (activeTab === 'inquiries') {
+        tabInq.classList.add('active');
+        tabSub.classList.remove('active');
+        panelInq.classList.remove('d-none');
+        panelSub.classList.add('d-none');
+        renderContacts(allContacts);
+      } else {
+        tabInq.classList.remove('active');
+        tabSub.classList.add('active');
+        panelInq.classList.add('d-none');
+        panelSub.classList.remove('d-none');
+        renderSubscribers(allSubscribers);
+      }
+    }
+
+    function handleSearch(query) {
+      const q = query.toLowerCase().trim();
+      
+      if (activeTab === 'inquiries') {
+        const filtered = allContacts.filter(c => 
+          c.name.toLowerCase().includes(q) || 
+          c.email.toLowerCase().includes(q) || 
+          c.mobile_number.toLowerCase().includes(q) || 
+          c.address.toLowerCase().includes(q) ||
+          (c.message && c.message.toLowerCase().includes(q))
+        );
+        renderContacts(filtered);
+      } else {
+        const filtered = allSubscribers.filter(s => 
+          s.email.toLowerCase().includes(q)
+        );
+        renderSubscribers(filtered);
+      }
+    }
+
+    function viewContact(id) {
+      const contact = allContacts.find(c => c.id === id);
+      if (!contact) return;
+
+      document.getElementById('modalName').innerText = contact.name;
+      document.getElementById('modalEmail').innerText = contact.email;
+      document.getElementById('modalMobile').innerText = contact.mobile_number;
+      document.getElementById('modalAddress').innerText = contact.address;
+      document.getElementById('modalMessage').innerText = contact.message || '(No message provided)';
+
+      const modal = document.getElementById('detailModal');
+      modal.style.display = 'flex';
+    }
+
+    function closeModal() {
+      document.getElementById('detailModal').style.display = 'none';
+    }
+
+    // Close modal on click outside content
+    window.onclick = function (event) {
+      const modal = document.getElementById('detailModal');
+      if (event.target === modal) {
+        closeModal();
+      }
+    }
+
+    async function deleteContact(id) {
+      if (!confirm('Are you sure you want to delete this contact submission?')) return;
+      
+      try {
+        const response = await fetch('/api/admin/delete-contact', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id })
+        });
+        
+        const result = await response.json();
+        if (result.success) {
+          showToast(result.message, 'success');
+          loadDashboardData();
+        } else {
+          showToast(result.message || 'Failed to delete contact', 'error');
+        }
+      } catch (err) {
+        showToast('Network error deleting contact.', 'error');
+      }
+    }
+
+    async function deleteSubscriber(id) {
+      if (!confirm('Are you sure you want to unsubscribe this email?')) return;
+
+      try {
+        const response = await fetch('/api/admin/delete-subscriber', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id })
+        });
+
+        const result = await response.json();
+        if (result.success) {
+          showToast(result.message, 'success');
+          loadDashboardData();
+        } else {
+          showToast(result.message || 'Failed to delete subscriber', 'error');
+        }
+      } catch (err) {
+        showToast('Network error unsubscribing.', 'error');
+      }
+    }
+
+    async function handleLogout() {
+      try {
+        const response = await fetch('/api/logout', { method: 'POST' });
+        const result = await response.json();
+        if (result.success) {
+          window.location.href = result.redirect || '/login.html';
+        }
+      } catch (err) {
+        showToast('Error signing out.', 'error');
+      }
+    }
+
+    // Helper functions
+    function formatDate(dateString) {
+      if (!dateString) return '';
+      const date = new Date(dateString);
+      // fallback in case of SQLite timestamp formatting
+      if (isNaN(date.getTime())) return dateString;
+      return date.toLocaleDateString('en-US', {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+    }
+
+    function escapeHTML(str) {
+      if (!str) return '';
+      return str.replace(/[&<>'"]/g, 
+        tag => ({
+          '&': '&amp;',
+          '<': '&lt;',
+          '>': '&gt;',
+          "'": '&#39;',
+          '"': '&quot;'
+        }[tag] || tag)
+      );
+    }
+  </script>
+</body>
+
+</html>
